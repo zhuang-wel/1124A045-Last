@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClinicGuide Pro</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "danger": "#D0021B",
+              "accent": "#f97316"
+            },
+            fontFamily: {
+              "display": ["Lexend", "Noto Sans TC", "sans-serif"]
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        min-height: 100dvh;
+        overscroll-behavior: none;
+      }
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      /* Custom scrollbar hiding for clean UI */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* 
+        Friendly Color Blind Mode
+        Palette:
+          - Dark Blue (#001040): Room labels, basic text
+          - Bright Yellow (#FFEA00): Main navigation path, important alerts
+          - Magenta (#D500F9): Secondary routes, status
+          - Pure Black (#000000) & Pure White (#FFFFFF): Background & Text
+      */
+      
+      html.color-blind {
+        --cb-bg: #FFFFFF;
+        --cb-text: #001040; /* Dark Blue */
+        --cb-primary: #001040;
+        --cb-yellow: #FFEA00; /* Bright Yellow */
+        --cb-magenta: #D500F9;
+        --cb-black: #000000;
+      }
+
+      /* Global Backgrounds */
+      html.color-blind body,
+      html.color-blind .bg-background-light,
+      html.color-blind .dark\:bg-background-dark,
+      html.color-blind .bg-slate-100,
+      html.color-blind .dark\:bg-slate-900,
+      html.color-blind .bg-white,
+      html.color-blind .dark\:bg-slate-800,
+      html.color-blind .dark\:bg-gray-800 {
+        background-color: var(--cb-bg) !important;
+        border-color: var(--cb-black) !important;
+        backdrop-filter: none !important;
+      }
+
+      /* Global Text - Dark Blue */
+      html.color-blind,
+      html.color-blind h1, 
+      html.color-blind h2, 
+      html.color-blind h3, 
+      html.color-blind p, 
+      html.color-blind span, 
+      html.color-blind div,
+      html.color-blind button,
+      html.color-blind .text-slate-900,
+      html.color-blind .dark\:text-white,
+      html.color-blind .text-gray-900,
+      html.color-blind .text-slate-500,
+      html.color-blind .text-slate-600,
+      html.color-blind .text-stone-900,
+      html.color-blind .material-symbols-outlined {
+        color: var(--cb-text) !important;
+      }
+
+      /* Primary Elements - Dark Blue Background, White Text */
+      html.color-blind .bg-primary,
+      html.color-blind .bg-blue-600,
+      html.color-blind .bg-accent { 
+        background-color: var(--cb-primary) !important;
+        color: #FFFFFF !important;
+        border: 2px solid var(--cb-black) !important;
+      }
+      
+      /* FIX: Force all content inside primary buttons to be white to override global span color */
+      html.color-blind .bg-primary *,
+      html.color-blind .bg-blue-600 *,
+      html.color-blind .bg-accent * {
+        color: #FFFFFF !important;
+      }
+
+      /* SOS / Alerts - Bright Yellow */
+      html.color-blind .bg-danger,
+      html.color-blind .bg-red-500 {
+         background-color: var(--cb-yellow) !important; 
+         color: var(--cb-black) !important;
+         border: 2px solid var(--cb-black) !important;
+      }
+      
+      /* Ensure text inside SOS/Danger is black */
+      html.color-blind .bg-danger *,
+      html.color-blind .bg-red-500 * {
+          color: var(--cb-black) !important;
+      }
+      
+      html.color-blind .text-danger,
+      html.color-blind span.text-danger {
+          background-color: var(--cb-yellow) !important;
+          color: var(--cb-black) !important;
+          padding: 2px 6px;
+          border-radius: 4px;
+      }
+      
+      /* SOS Modal text fix */
+      html.color-blind .bg-danger .text-white {
+          color: var(--cb-black) !important;
+      }
+      
+      /* Map Styling */
+      
+      /* Rooms (Inactive) */
+      html.color-blind .map-room-inactive {
+        fill: #FFFFFF !important;
+        stroke: var(--cb-text) !important;
+        stroke-width: 2px;
+      }
+      
+      /* Rooms (Active/Destination) - Magenta */
+      html.color-blind .map-room-active {
+        fill: var(--cb-magenta) !important;
+        stroke: var(--cb-black) !important;
+        stroke-width: 3px;
+      }
+      
+      /* Room Text */
+      html.color-blind .map-text {
+        fill: var(--cb-text) !important;
+        font-weight: bold;
+      }
+      html.color-blind .map-text-active {
+        fill: #FFFFFF !important; /* White text on Magenta */
+      }
+      
+      /* Navigation Path - Bright Yellow with Outline */
+      html.color-blind .map-path {
+        stroke: var(--cb-yellow) !important;
+        stroke-width: 12px !important;
+        filter: drop-shadow(0 0 2px black);
+        stroke-dasharray: none !important;
+      }
+      
+      /* Points */
+      html.color-blind .map-point {
+        fill: var(--cb-yellow) !important;
+        stroke: var(--cb-black) !important;
+      }
+
+      /* Toggles & Sliders */
+      html.color-blind input[type="checkbox"] + div,
+      html.color-blind input[type="range"] {
+          background-color: var(--cb-bg) !important;
+          border: 2px solid var(--cb-text) !important;
+      }
+      html.color-blind input[type="checkbox"]:checked + div {
+          background-color: var(--cb-text) !important;
+      }
+      
+      /* SOS Pulse Animation */
+      @keyframes sos-pulse {
+        0% {
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(208, 2, 27, 0.7);
+        }
+        70% {
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 0 10px rgba(208, 2, 27, 0);
+        }
+        100% {
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(208, 2, 27, 0);
+        }
+      }
+      .animate-sos {
+        animation: sos-pulse 2s infinite;
+      }
+
+    </style>
+
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3"
+  }
+}
+</script>
+  <script type="module" crossorigin src="./assets/index-DIFM0dwb.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
