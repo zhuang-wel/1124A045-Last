@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {
+      base: './',
+      // Use relative base so built static files can be served from any path (GitHub Pages, file://, etc.)
       server: {
         port: 3000,
         host: '0.0.0.0',
